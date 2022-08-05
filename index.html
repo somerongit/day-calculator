@@ -48,7 +48,7 @@
             <br><br>
         </form>
         <button onclick="getDiffernce()">Submit</button>
-        <br>
+        <br><br>
         <label id="dayDiffResult"></label>
     </div>
 
@@ -75,7 +75,7 @@
             <br><br>
         </form>
         <button onclick="getCalculatorResult()">Submit</button>
-        <br>
+        <br><br>
         <div>
             <label id="dayCalResult"></label>
         </div>
@@ -99,7 +99,7 @@
                 h = 0;
             }
 
-            return (d > 0 ? (pad(d) + " Days, ") : "") + (h > 0 ? (pad(h) + " Hour, ") : "") + (m > 0 ? (pad(m) + "Min") : "")
+            return (d > 0 ? (pad(d) + " Days, ") : "") + (h > 0 ? (pad(h) + " Hour, ") : "") + (m > 0 ? (pad(m) + " Min") : "")
         }
         function getDiffernce() {
             let date, date1, result
@@ -128,11 +128,12 @@
                 } else {
                     temp = new Date(date)
                     for (let i = 0; i < Number(rCount); i++) {
-                        result = new Date(temp)
-                        result.setDate(temp.getDate() + Number(count))
-                        document.getElementById("dayCalResult").innerText = result
-                        temp = new Date(result)
+                        let dt = new Date(temp)
+                        dt.setDate(temp.getDate() + Number(count))
+                        temp = new Date(dt)
+                        result = (result ? result : "") + "Count " + (i + 1) + ": " + dt + "\n\n"
                     }
+                    document.getElementById("dayCalResult").innerText = result
                 }
             } else {
                 if (rCount == 1) {
@@ -142,11 +143,12 @@
                 } else {
                     temp = new Date(date)
                     for (let i = 0; i < Number(rCount); i++) {
-                        result = new Date(temp)
-                        result.setDate(temp.getDate() - Number(count))
-                        document.getElementById("dayCalResult").innerText = result
-                        temp = new Date(result)
+                        let dt = new Date(temp)
+                        dt.setDate(temp.getDate() - Number(count))
+                        temp = new Date(dt)
+                        result = (result ? result : "") + "Count " + (i + 1) + ": " + dt + "\n\n"
                     }
+                    document.getElementById("dayCalResult").innerText = result
                 }
             }
 
