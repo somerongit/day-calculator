@@ -38,7 +38,6 @@
 
     <div id="dayDifference">
         <h1>Day Difference</h1>
-
         <form>
             <label for="date">Start Date:</label>
             <input required type="datetime-local" id="date" name="date">
@@ -49,34 +48,39 @@
             <br><br>
         </form>
         <button onclick="getDiffernce()">Submit</button>
+        <br>
+        <label id="dayDiffResult"></label>
     </div>
-    <br>
 
-    <label id="dayDiffResult"></label>
 
     <div id="dayCalculator">
         <h1>Day Calculator</h1>
-
         <form>
-            <label for="birthdaytime2">Start Date:</label>
-            <input required type="date" id="birthdaytime2" name="birthdaytime2">
+            <label for="dateCal">Start Date:</label>
+            <input required type="date" id="dateCal" name="dateCal">
 
             <select name="operation" id="operation">
                 <option value="add">Add</option>
                 <option value="sub">Subtrct</option>
             </select>
+
             <br> <br>
             <label for="num">Enter Count:</label>
-
             <input required type="number" id="num" name="num" min="1" max="365">
+
             <br> <br>
             <label for="num">Repeat Count:</label>
-            <input type="number" id="num" name="num" value=1>
+            <input type="number" id="rNum" name="rNum" value=1 min="0" max="25">
+
             <br><br>
         </form>
-        <button onclick="getDiffernce()">Submit</button>
-
+        <button onclick="getCalculatorResult()">Submit</button>
+        <br>
+        <div>
+            <label id="dayCalResult"></label>
+        </div>
     </div>
+
     <script>
         function dateFormater(t) {
             let cd = 24 * 60 * 60 * 1000,
@@ -107,6 +111,45 @@
                 result = Math.abs(date - date1)
             }
             document.getElementById("dayDiffResult").innerText = (dateFormater(result))
+        }
+
+        function getCalculatorResult() {
+            let date, operation, count, rCount, temp, result
+            date = new Date(document.getElementById("dateCal").value)
+            operation = document.getElementById("operation").value
+            count = document.getElementById("num").value
+            rCount = document.getElementById("rNum").value
+
+            if (operation == "add") {
+                if (rCount == 1) {
+                    result = new Date(date)
+                    result.setDate(date.getDate() + Number(count))
+                    document.getElementById("dayCalResult").innerText = result
+                } else {
+                    temp = new Date(date)
+                    for (let i = 0; i < Number(rCount); i++) {
+                        result = new Date(temp)
+                        result.setDate(temp.getDate() + Number(count))
+                        document.getElementById("dayCalResult").innerText = result
+                        temp = new Date(result)
+                    }
+                }
+            } else {
+                if (rCount == 1) {
+                    result = new Date(date)
+                    result.setDate(date.getDate() - Number(count))
+                    document.getElementById("dayCalResult").innerText = result
+                } else {
+                    temp = new Date(date)
+                    for (let i = 0; i < Number(rCount); i++) {
+                        result = new Date(temp)
+                        result.setDate(temp.getDate() - Number(count))
+                        document.getElementById("dayCalResult").innerText = result
+                        temp = new Date(result)
+                    }
+                }
+            }
+
         }
 
         function hideDayDifference() {
