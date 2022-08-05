@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <style>
+    <!-- <style>
         .button {
             border: none;
             padding: 15px 32px;
@@ -22,21 +22,21 @@
         /* Gray */
         .button2 {
             background-color: #555555;
-            color:white;
+            color: white;
         }
 
         /* Black */
-    </style>
+    </style> -->
 </head>
 
 <body>
 
-    <div>
-        <button class="button button1" onclick="hideDayCalculator()">Day Difference</button>
-        <button class="button button2" onclick="hideDayDifference()">Day Calculator</button>
-    </div>
+    <!-- <div>
+        <button id="hideDayCalculator" type="button" class="button button1" onclick="hideDayCalculator()">Day Difference</button>
+        <button id="hideDayDifference" type="button" class="button button2" onclick="hideDayDifference()">Day Calculator</button>
+    </div> -->
 
-    <div name="dayDifference">
+    <div id="dayDifference">
         <h1>Day Difference</h1>
 
         <form>
@@ -47,11 +47,13 @@
 
             <input required type="datetime-local" id="date1" name="date1">
             <br><br>
-            <input type="submit">
+            <button type="submit" onclick="getDiffernce()">Submit</button>
         </form>
     </div>
 
-    <div name="dayCalculator">
+    <label id="dayDiffResult"></label>
+
+    <div id="dayCalculator">
         <h1>Day Calculator</h1>
 
         <form>
@@ -73,19 +75,50 @@
             <input type="submit">
         </form>
     </div>
-<script>
-    function hideDayDifference(){
-        var element = document.getElementByName("dayDifference");
-        element.style.display = "none";
-        var element1 = document.getElementByName("dayCalculator");
-        element1.style.display = true;
-    }
-    function hideDayCalculator(){
-        var element = document.getElementByName("dayCalculator");
-        element.style.display = "none";
-        var element1 = document.getElementByName("dayDifference");
-        element1.style.display = true;
-    }
+    <script>
+        function dateFormater(t) {
+            let cd = 24 * 60 * 60 * 1000,
+                ch = 60 * 60 * 1000,
+                d = Math.floor(t / cd),
+                h = Math.floor((t - d * cd) / ch),
+                m = Math.round((t - d * cd - h * ch) / 60000),
+                pad = function (n) { return n < 10 ? '0' + n : n; };
+
+            if (m === 60) {
+                h++;
+                m = 0;
+            }
+            if (h === 24) {
+                d++;
+                h = 0;
+            }
+
+            return (d > 0 ? (pad(d) + " Days, ") : "") + (h > 0 ? (pad(h) + " Hour, ") : "") + (m > 0 ? (pad(m) + "Min") : "")
+        }
+        function getDiffernce() {
+            let date, date1, result
+            date = new Date(document.getElementById("date").value)
+            date1 = new Date(document.getElementById("date1").value)
+            if (date < date1) {
+                result = Math.abs(date1 - date)
+            } else {
+                result = Math.abs(date - date1)
+            }
+            document.getElementById("dayDiffResult").innerText = (dateFormater(result))
+        }
+
+        function hideDayDifference() {
+            var element = document.getElementById("dayDifference");
+            element.style.visibility = "hidden";
+            var element1 = document.getElementById("dayCalculator");
+            element1.style.visibility = "visible";
+        }
+        function hideDayCalculator() {
+            var element = document.getElementById("dayCalculator");
+            element.style.visibility = "hidden";
+            var element1 = document.getElementById("dayDifference");
+            element1.style.visibility = "visible";
+        }
     </script>
 
 
