@@ -41,12 +41,12 @@
         <h1>Day Difference</h1>
         <form>
             <label for="date">Start Date:</label>
-            <input required type="datetime-local" id="date" name="date" value="2022-08-22T22:22" max="2100-12-31T23:59"
+            <input required type="datetime-local" id="date" name="date" max="2100-12-31T23:59"
                 min="1800-01-01T00:00">
             <br> <br>
             <label for="date1">End Date:</label>
 
-            <input required type="datetime-local" id="date1" name="date1" value="2022-08-22T22:59"
+            <input required type="datetime-local" id="date1" name="date1"
                 max="2100-12-31T23:59" min="1800-01-01T00:00">
             <br><br>
         </form>
@@ -115,17 +115,48 @@
 
             return (d > 0 ? (pad(d) + " Days, ") : "") + (h > 0 ? (pad(h) + " Hour, ") : "") + (m > 0 ? (pad(m) + " Min") : "")
         }
-        function getDiffernce() {
-            let date, date1, result
-            date = new Date(document.getElementById("date").value)
-            date1 = new Date(document.getElementById("date1").value)
-            if (date < date1) {
-                result = Math.abs(date1 - date)
-            } else {
-                result = Math.abs(date - date1)
-            }
-            document.getElementById("dayDiffResult").innerText = (dateFormater(result))
-        }
+        
+function getDiffernce() {
+    let date = new Date(document.getElementById("date").value);
+    let date1 = new Date(document.getElementById("date1").value);
+
+    if (date > date1) {
+        [date, date1] = [date1, date];
+    }
+
+    let diffMs = date1 - date;
+    let diffYears = date1.getFullYear() - date.getFullYear();
+    let diffMonths = date1.getMonth() - date.getMonth();
+    let diffDays = date1.getDate() - date.getDate();
+
+    if (diffDays < 0) {
+        diffMonths--;
+        let prevMonth = new Date(date1.getFullYear(), date1.getMonth(), 0);
+        diffDays += prevMonth.getDate();
+    }
+
+    if (diffMonths < 0) {
+        diffYears--;
+        diffMonths += 12;
+    }
+    let totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    let totalWeeks = Math.floor(totalDays / 7);
+    let totalHours = Math.floor(diffMs / (1000 * 60 * 60));
+    let totalMinutes = Math.floor(diffMs / (1000 * 60));
+    let totalMonths = Math.floor(totalDays / 30.44);
+    let totalYears = (totalDays / 365.25).toFixed(2);
+
+    let remainingMs = diffMs - (totalDays * 1000 * 60 * 60 * 24);
+    let remainingHours = Math.floor(remainingMs / (1000 * 60 * 60));
+    let remainingMinutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+
+    let breakdown = `${diffYears} year(s), ${diffMonths} month(s), ${diffDays} day(s), ${remainingHours} hour(s), ${remainingMinutes} minute(s)`;
+    let totals = `Total: ${totalYears} year(s), ${totalMonths} month(s), ${totalWeeks} week(s), ${totalDays} day(s), ${totalHours} hour(s), ${totalMinutes} minute(s)`;
+
+    document.getElementById("dayDiffResult").innerText = `${breakdown}\n${totals}`;
+}
+
+
 
         function getCalculatorResult() {
             let date, operation, count, rCount, temp, result
